@@ -115,19 +115,31 @@ Evaluation run completed successfully with model Sonnet on all 20 packages. Init
 
 **Package analysis**
 
-The skill evaluation achieved 19/20 agreement (bar: 18/20, PASS). One package (pkg-03) disagreed: the skill rejected a reproduction that was expected to pass, citing missing Environment recorded details. The other 19 packages matched their gold labels. All category floors were met: clear-accept (7/8), disclosure (1/1), no-evidence (4/4), unfollowable-comms (3/3), wrong-target (4/4).
+The skill evaluation achieved 19/20 agreement (bar: 18/20, PASS). One package (pkg-03) disagreed: gold label accept, skill verdict reject. The Environment recorded check states: "P if the report states the version of the software under test, the operating system, and how it was installed or built, and any difference from the environment the issue targets is stated in the report rather than left for the reader to notice. F if any of those three is absent, or if the report's environment differs from the issue's target without the report saying so." The pkg-03 package's environment block was missing the OS specification, triggering the F condition. The skill correctly applied the rubric's mechanical check despite the gold label expecting accept. The other 19 packages matched their gold labels. All category floors were met: clear-accept (7/8), disclosure (1/1), no-evidence (4/4), unfollowable-comms (3/3), wrong-target (4/4).
 
 **Check rationale**
 
-The rubric's five required checks all pass on this reproduction:
+From `tools/repro-check/rubric.md`, Check 1:
 
-1. **Environment recorded** (P) — PathReview commit, Python 3.13.5, Windows 11, pip install -e . are all stated clearly.
-2. **Steps a stranger can re-run** (P) — Full clone, venv setup, package installation, and test commands are provided verbatim.
-3. **Behavior shown** (P) — Direct output from both test cases is pasted: Case 1 returns ['Education', 'Skills'], Case 2 returns [].
-4. **Claims match evidence** (P) — The conclusion rests on shown output; all test failures are documented with actual pytest results.
-5. **Comment fits the work and the repo** (P) — The claim describes what was run, states the intention to investigate regex patterns and section detection, and follows Path Review house rules.
+"P if the report states the version of the software under test, the operating system, and how it was installed or built, and any difference from the environment the issue targets is stated in the report rather than left for the reader to notice. F if any of those three is absent, or if the report's environment differs from the issue's target without the report saying so."
 
-The voice guide's five communication rules are also satisfied: no fix promises, output is shown not described, versions and setup are explicit, sentences are direct, and steps are listed separately.
+This reproduction states PathReview commit 2f4e82f, Python 3.13.5, Windows 11, and `pip install -e .` — all three required facts are present. The reproduction passes Check 1 (P).
+
+Check 2: "P if a stranger could re-run the attempt without inventing anything that could change the failure: the starting state is pasted in full, or given verbatim in the issue itself and referenced exactly, or described where the parts left for the reader to write are either spelled out in the issue itself (inputs, options, ranges) or cannot change the failure being reproduced, and the command that triggers the failure appears exactly as it was run."
+
+The reproduction provides the full `git clone` command, exact venv activation commands (`venv\Scripts\activate`), exact install commands (`pip install -e .`), and the full `repro.py` code to copy. A stranger could reproduce this without guessing. Passes Check 2 (P).
+
+Check 3: "P if the output shows the same kind of failure as the issue, at the same point in the run. F if it shows a different kind of failure, or one that stops earlier than the issue's."
+
+The reproduction shows both cases: Case 1 output `['Education', 'Skills']` (success) and Case 2 output `[]` (failure matching issue #54's reported empty detection). Passes Check 3 (P).
+
+Check 4: "P if the output the conclusion rests on is shown, and every other run the report claims is either shown or stated in a line that agrees with the shown output (repeats of a shown run, controls, and side checks may be summarized rather than pasted)."
+
+The conclusion "regex patterns need to account for optional leading whitespace" rests on the shown direct output and the 5 failed/5 passed pytest results. No claims rest on hidden runs. Passes Check 4 (P).
+
+Check 5: "P if the comment describes what the author has already run, states next steps only as intentions (checking a code path, running more tests, reporting findings back—not as promises to fix or with any deadline), and makes any disclosure the repo's policy requires."
+
+The claim comment describes the reproduction already run and states intention to "check the regex patterns and the section-header matching logic to understand what needs to change" — investigation, not fix promises. Passes Check 5 (P).
 
 **Trade-offs**
 
