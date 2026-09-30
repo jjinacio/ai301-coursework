@@ -23,7 +23,11 @@ jjinacio
 
 **Claim comment**
 
-https://github.com/codepath/pathreview-ai301-fa26-s3/issues/54
+I am investigating issue #54. The problem is that `_detect_sections()` in `resume_parser.py` uses regex patterns anchored at the start of a line. When PDF-extracted text has leading whitespace before section headers like "Education:" and "Skills:", the patterns do not match and `detected_sections` returns empty.
+
+My plan: I will reproduce this on a clean setup of my fork, run the exact snippet from the issue, and verify the test failures. Then I will check the regex patterns and the section-header matching logic to understand what needs to change.
+
+**Reproduction comment**
 
 Reproduced on a clean setup of my fork.
 
@@ -95,10 +99,6 @@ The `_detect_sections()` function in `ingestion/parsers/resume_parser.py` uses r
 ## Conclusion
 
 Section detection works without leading whitespace but fails when text is indented. The regex patterns need to account for optional leading whitespace before section headers.
-
-**Reproduction comment**
-
-See claim comment above for full reproduction details, environment, and root cause analysis.
 
 ## Eval iterations
 
