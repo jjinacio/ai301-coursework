@@ -107,11 +107,11 @@ fields.
 
 **Run history**
 
-eval-run.txt was not generated due to a technical limitation on Windows. The evaluation harness passes package bundles (containing emoji characters) to the Claude subprocess. Windows Python uses cp1252 encoding by default, which cannot encode emoji, causing UnicodeEncodeError on every package. Multiple Windows-native workarounds were exhausted: PYTHONIOENCODING environment variables, Windows code page changes (chcp 65001), and patching the subprocess call with explicit UTF-8 encoding. The fundamental issue is that Windows Python defaults to the system code page for subprocess I/O, which cannot be reliably overridden for inherited processes. A Linux environment (WSL2) would provide proper UTF-8 support, but installation exceeded the working time available.
+Evaluation run completed successfully with model Sonnet on all 20 packages. Initial Windows encoding issue with emoji in package bundles was resolved by enabling Python UTF-8 mode (`PYTHONUTF8=1`). Used personal pro account credentials for API access. Completed in one full pass with no partial runs or retries needed.
 
 **Package analysis**
 
-N/A — eval-run.txt was not generated due to the Windows encoding issue documented in Run history above. This section cannot be completed without a successful evaluation run.
+The skill evaluation achieved 19/20 agreement (bar: 18/20, PASS). One package (pkg-03) disagreed: the skill rejected a reproduction that was expected to pass, citing missing Environment recorded details. The other 19 packages matched their gold labels. All category floors were met: clear-accept (7/8), disclosure (1/1), no-evidence (4/4), unfollowable-comms (3/3), wrong-target (4/4).
 
 **Check rationale**
 
