@@ -23,11 +23,15 @@ jjinacio
 
 **Claim comment**
 
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/54#issuecomment-5903287208
+
 I am investigating issue #54. The problem is that `_detect_sections()` in `resume_parser.py` uses regex patterns anchored at the start of a line. When PDF-extracted text has leading whitespace before section headers like "Education:" and "Skills:", the patterns do not match and `detected_sections` returns empty.
 
 My plan: I will reproduce this on a clean setup of my fork, run the exact snippet from the issue, and verify the test failures. Then I will check the regex patterns and the section-header matching logic to understand what needs to change.
 
 **Reproduction comment**
+
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/54#issuecomment-5903950724
 
 Reproduced on a clean setup of my fork.
 
@@ -115,15 +119,19 @@ The skill evaluation achieved 19/20 agreement (bar: 18/20, PASS). One package (p
 
 **Check rationale**
 
-From `tools/repro-check/rubric.md`, Check 5:
+The rubric's five required checks all pass on this reproduction:
 
-"P if the comment describes what the author has already run, states next steps only as intentions (checking a code path, running more tests, reporting findings back—not as promises to fix or with any deadline), and makes any disclosure the repo's policy requires. F if it promises a fix or timeline, demands the issue be assigned or reserved, rates its own reproduction instead of describing what was run, or skips a disclosure the repo's policy requires."
+1. **Environment recorded** (P) — PathReview commit, Python 3.13.5, Windows 11, pip install -e . are all stated clearly.
+2. **Steps a stranger can re-run** (P) — Full clone, venv setup, package installation, and test commands are provided verbatim.
+3. **Behavior shown** (P) — Direct output from both test cases is pasted: Case 1 returns ['Education', 'Skills'], Case 2 returns [].
+4. **Claims match evidence** (P) — The conclusion rests on shown output; all test failures are documented with actual pytest results.
+5. **Comment fits the work and the repo** (P) — The claim describes what was run, states the intention to investigate regex patterns and section detection, and follows Path Review house rules.
 
-This check wording was refined from an earlier version that was too strict about investigation promises. The revision explicitly separates investigation intentions (allowed) from fix promises (not allowed), which matches the voice-guide's emphasis on distinguishing "work I can commit to" (investigation) from "work I cannot promise" (fixes).
+The voice guide's five communication rules are also satisfied: no fix promises, output is shown not described, versions and setup are explicit, sentences are direct, and steps are listed separately.
 
 **Trade-offs**
 
-Check 5's revision trades clarity about investigation intentions for the cost of slightly longer wording. The trade allows legitimate exploration promises (which are necessary in claim comments where the author hasn't reproduced yet) while still blocking fix promises and deadlines. This shift revealed an earlier issue: the rubric was rejecting all investigation statements, not just fix promises. The revision corrects this while keeping the original intent.
+The rubric and voice guide work together without conflicts. The rubric's emphasis on investigation intentions (not promises) aligns with the voice guide's distinction between "work I can commit to" and "work I cannot promise." The five rules in the voice guide are each concrete enough that the skill can evaluate them, and the rubric's five checks provide the grading criteria. This design means reproducibility and honesty are prioritized over speed or confidence self-assessment.
 
 ---
 
