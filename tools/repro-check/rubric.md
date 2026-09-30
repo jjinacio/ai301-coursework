@@ -1,0 +1,16 @@
+# Rubric: is this reproduction package ready to post?
+
+## Checks
+
+| Check | Evidence | Pass condition | Weight |
+|---|---|---|---|
+| Environment recorded | the repro report's environment record, read against the version, OS, and install method the issue names | P if the report states the version of the software under test, the operating system, and how it was installed or built, and any difference from the environment the issue targets is stated in the report rather than left for the reader to notice. F if any of those three is absent, or if the report's environment differs from the issue's target without the report saying so. | required |
+| Steps a stranger can re-run | the repro report's preparation and execution sections, read as if by someone who has never opened this repo | P if a stranger could re-run the attempt without inventing anything that could change the failure: the starting state is pasted in full, or given verbatim in the issue itself and referenced exactly, or described where the parts left for the reader to write are either spelled out in the issue itself (inputs, options, ranges) or cannot change the failure being reproduced, and the command that triggers the failure appears exactly as it was run. F if a step the reader needs is asserted rather than shown ("I ran it locally", "I set up the project"), or the reader would have to guess a file's contents, a flag, a driver, or a command that could change what the run does. | required |
+| Behavior shown | the report's pasted output, read against the failure the issue describes | P if the output shows the same kind of failure as the issue, at the same point in the run. F if it shows a different kind of failure, or one that stops earlier than the issue's. The output decides, not the report's claim that they match. | required |
+| Claims match evidence | each factual claim in the repro report and the claim comment, read against the output offered for it | P if the output the conclusion rests on is shown, and every other run the report claims is either shown or stated in a line that agrees with the shown output (repeats of a shown run, controls, and side checks may be summarized rather than pasted). A reported "I could not reproduce this", backed by shown output, passes. F if the conclusion rests on a run whose output appears nowhere in the report, or states a conclusion the shown output does not support. | required |
+| Comment fits the work and the repo | the candidate claim comment, read against the work the report shows and the repo facts block's contribution policy | P if the comment describes what the author has already run, states next steps only as intentions (checking a code path, running more tests, reporting findings back—not as promises to fix or with any deadline), and makes any disclosure the repo's policy requires. F if it promises a fix or timeline, demands the issue be assigned or reserved, rates its own reproduction instead of describing what was run, or skips a disclosure the repo's policy requires. | required |
+
+## Verdict rule
+
+Accept (`ready`) only if every required check passes. Reject (`hold`) if any
+required check is F or unclear. Preferred checks never change the verdict.
