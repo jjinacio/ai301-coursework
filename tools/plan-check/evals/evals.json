@@ -1,0 +1,17 @@
+{
+  "skill_name": "plan-check",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Grade this plan package. It's from calib-03 (sharkdp/bat repo). Read the Candidate plan, the plan comment, and the Repro evidence. Check if the plan diagnosis matches the evidence shown in the reproduction. Use your rubric to decide if it's ready to post.",
+      "expected_output": "Verdict: hold. The plan misdiagnoses the cause (blames key-binding registration when evidence shows it's syntax highlighting causing slowness).",
+      "files": ["C:\\Users\\joshi\\Downloads\\ai301-unit3-starter\\eval\\packages\\calib-03.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "Grade this plan package from calib-01 (bat repo). Read the plan, the comment, and cross-check the diagnosis against the Repro evidence. Use your rubric to decide if it's ready to post upstream.",
+      "expected_output": "Verdict: ready. The plan diagnosis matches the evidence, scope is clear (one file), test plan would show if the fix works.",
+      "files": ["C:\\Users\\joshi\\Downloads\\ai301-unit3-starter\\eval\\packages\\calib-01.md"]
+    }
+  ]
+}
