@@ -1,0 +1,17 @@
+# Rubric: is this plan ready to post and build from?
+
+## Checks
+
+| Check | Evidence | Pass condition | Weight |
+|---|---|---|---|
+| Diagnosis grounded in repro evidence | the plan's stated cause, read against the repro evidence's observed behavior and steps | P if the diagnosis names a mechanism that would explain the behavior the repro evidence shows, and does not contradict any observed fact in that evidence. F if the diagnosis ignores a key observation the repro evidence makes, contradicts it, or names a cause that does not match what the evidence shows. | required |
+| Scope is bounded | the plan's In/Out statements and the change scope, read as a single-document scope boundary | P if the plan states what will be changed and what will not, with no implication that related areas or side effects will be fixed. F if the scope is ambiguous, or the plan implies broader fixes than what the In statement names. | required |
+| Change targets the cause, not the symptom | the plan's proposed change, read against the diagnosis and the observed failure | P if the change would address the root cause named in the diagnosis, not just mask or work around the symptom. F if the change would only affect the symptom without fixing what the diagnosis says is wrong. | required |
+| Executability: a stranger can start | the plan's stated approach and change description, read as instructions | P if someone who has never seen the codebase could start executing the plan without asking the author anything: file names/paths are stated, the approach is spelled out step-by-step, and the order of work is clear. F if critical details are missing, asserted rather than shown ("obvious fix", "standard pattern"), or would require reading unspecified code to understand what to do. | required |
+| Test plan is decisive | the plan's test statement, read against the repro evidence's steps and artifacts | P if the test plan would actually observe whether the fix works: it re-runs the repro steps or equivalent, names the changed behavior to look for, and would catch both success and failure. F if the test plan is vague, would not distinguish success from failure, or does not connect to the repro evidence. | required |
+| Honesty: unknowns and risks acknowledged | the plan's statement of unknowns, risks, or caveats | P if the plan names any real unknowns (behavior not confirmed in the repro evidence, assumptions about code structure, impact on other views or workflows), and either addresses them or explains why they are acceptable to leave. F if the plan presents confident claims about things it has not verified, or omits real risks and unknowns. | required |
+| Comment fits thread and repo | the plan comment, read against the repo-facts block's contribution policy, issue thread, and the work the plan describes | P if the comment accurately says what the plan will do, keeps a tone consistent with the repo's conventions, discloses any AI use the repo requires, and makes no promises beyond executing the plan. F if it overstates confidence, promises a timeline, skips a required disclosure, or ignores the repo's stated contribution policies. | required |
+
+## Verdict rule
+
+Accept (`ready`) if and only if every required check passes. Reject (`hold`) if any required check fails or is unclear. Preferred checks never change the verdict. Treat `unclear` as `fail`: a plan you cannot verify from the package is not ready to build from.
