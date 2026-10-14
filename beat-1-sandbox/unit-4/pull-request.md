@@ -36,9 +36,9 @@ pkg-02 (clear-accept, Textualize/rich#4208). Gold: accept. Skill verdict: accept
 
 **Check rationale**
 
-Check 6: "Branch name is correct | the branch name as it appears in the fork (live mode); in eval mode, this check is marked preferred since branch names are not captured in eval packages | P if the branch name follows the required format: type prefix (fix/feat/docs/test/refactor/perf/chore/), issue number, and short description, like `fix/54-section-detection`. F if the naming format does not match or the issue number is wrong. | preferred"
+Check 6: "Branch name is correct | the branch name as it appears in the PR metadata | P if the branch name follows the required format: type prefix (fix/feat/docs/test/refactor/perf/chore/), issue number, and short description, like `fix/54-section-detection`. F if the naming format does not match or the issue number is wrong. In eval mode, this check is preferred (not verifiable from frozen packages); in live mode, this check is required. | preferred (eval)"
 
-Originally this check was required, which blocked all eval packages from passing because the fork branch name is not included in the captured eval package metadata. The eval packages contain plan, issue, PR description, diff, test evidence, and repo facts, but not the branch name. In live mode, the branch name is extracted from the PR metadata and verified. In eval mode, the check cannot be verified, so making it preferred allows the skill to grade the other five checks (which are verifiable) without being blocked by missing metadata.
+Originally this check was required, which blocked all eval packages from passing because the fork branch name is not included in the captured eval package metadata. The eval packages contain plan, issue, PR description, diff, test evidence, and repo facts, but not the branch name. The check was made preferred for eval mode but required for live mode, with the mode-conditional logic moved to the Weight column (where it belongs) instead of the Evidence column. This allows the skill to grade the other five checks (which are verifiable in eval) without being blocked by missing metadata.
 
 **Trade-offs**
 
