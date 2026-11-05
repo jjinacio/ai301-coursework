@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Add a safety event count to the health check endpoint
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -7,10 +7,9 @@ the repository is not read. **Keep every section header below under its exact na
 format criteria grade exactly that. Your course repo link is the whole submission: no tool
 files and no evidence uploads are part of Assignment 5.
 
-**Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
+**Contribution Number:** 1
+**Student:** Josh Inacio
+**GitHub Username:** jjinacio
 **Issue:** [GitHub issue link]
 **Pull Request:** [GitHub PR link, once opened]
 
@@ -55,10 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Built issue-scout with Python-focused search strategy; graded 5 candidates from PathReview sandbox**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I installed the issue-scout tool, wrote a search strategy with 3 queries targeting Python, backend work, and beginner-friendly issues, and applied ranking filters (no assignees, <10 comments, recent activity preferred). The scout found 5 candidates in codepath/pathreview-ai301-fa26-s3; grading with the rubric showed all 5 passed (Active repo, Small clear fix, Available, AI contribution allowed). No significant breaks occurred — the scout functioned as designed, though the permission system required explicit `gh` allowlist setup. This taught me that real-world tool setup has environmental constraints; I updated settings.json to allow `gh` commands globally so future skills can run without repeated permission blocks.
 
 **Unit 6: [one line on the tool work]**
 
