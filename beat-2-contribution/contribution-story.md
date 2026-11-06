@@ -54,9 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: Built issue-scout, graded sandbox candidates, and ran one real-world scan**
+**Unit 5: Built issue-scout, graded sandbox candidates, and iterated the real-world scan**
 
-I installed issue-scout and rewrote `search-strategy.md` with four real-world queries, each traced to my fit profile, and I had to allow `gh search issues` in `settings.json` before the scan could run. The scan accepted five issues, but all five came from the Java query, because every top result had zero comments and the same update date, so the ranking couldn't separate them. The Python queries never reached grading. I haven't applied the rebalancing fix yet; it's noted in `scan-notes.md`.
+I installed issue-scout and rewrote `search-strategy.md` with four real-world queries, each traced to my fit profile, and I had to allow `gh search issues` in `settings.json` before the scan could run. The first scan accepted five issues, but all five came from the Java query, because every top result had zero comments and the same update date. I then interleaved the four queries before taking the top five, and a rescan graded candidates from all three query families: four accepts and one reject. I skipped a star filter, because stars aren't in the search results, and the details are in `scan-notes.md`.
 
 My second pick is MaterialX #2813. It is explained under Why I Chose This Issue.
 
@@ -86,9 +86,9 @@ My second pick is MaterialX #2813. The scout rejected it because a seven-week-ol
 **Toolkit**
 
 - Tool: issue-scout (rubric and search strategy), goodfirstissue.dev, and manual grading
-- What it produced: I found #250 on goodfirstissue.dev, not through the scout. The scout's first two grades rejected #250 only because of my own claim, since the Available check treats any assignee as taken. After I changed that rule, it accepted #250 twice, with a difficulty note of straightforward. My one real-world scan accepted five issues, all from the Java query.
+- What it produced: I found #250 on goodfirstissue.dev, not through the scout. The scout's first two grades rejected #250 only because of my own claim, since the Available check treats any assignee as taken. After I changed that rule, it accepted #250 twice, with a difficulty note of straightforward. My first real-world scan accepted five issues, all from the Java query; after I applied the interleave fix, the rescan graded candidates from all three query families (four accepts, one reject).
 - Difficulties: The scan's ranking didn't separate anything. Every top candidate had 0 comments and was updated the same day, so search order picked the top five and the Python queries never reached grading. The accepts on #250 came after I'd claimed it and opened a PR, so they didn't help me choose it.
-- What changed: Applied the Unit 6 scope-feasible patch and difficulty note, changed Available to pass a sole assignee who is me, and kept MaterialX #2813 after a reject for a stale claim comment. I logged two ranking fixes (round-robin across queries, a star filter) but haven't applied them yet.
+- What changed: Applied the Unit 6 scope-feasible patch and difficulty note, changed Available to pass a sole assignee who is me, and kept MaterialX #2813 after a reject for a stale claim comment. I applied the round-robin interleave and rescanned, and skipped the star filter because stars aren't in the search result fields.
 
 ---
 
