@@ -140,14 +140,14 @@ Setup process was straightforward — the Makefile automates the complex javac f
 
 **Reproduction Evidence**
 
-- **Setup complete:** Git clone successful, Java 25 verified, make available
+- **Setup complete:** Git clone successful on Windows. This machine has JDK 21 and no `make`, so I compiled the kernel with the Makefile's javac flags locally. The full toolchain ran in GitHub Codespaces and upstream CI: `make conformance` passed 512/512 in Codespaces, and CI passed every make test target on this commit (https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270).
 - **Pattern identified:** Integer.hashCode(int), Long.hashCode(long), Float.hashCode(float), Double.hashCode(double), Boolean.hashCode(boolean) all exist and follow consistent pattern (all return `value;`)
 - **Gap confirmed with compilation error:** On upstream master, attempting to call `Byte.hashCode(byte)`, `Short.hashCode(short)`, or `Character.hashCode(char)` produces: `error: method hashCode in class Byte cannot be applied to given types required: no arguments, found: byte`
 - **My findings:** Issue is clear and well-scoped. The pattern to follow is already established. The error message proves the methods are missing (they exist as instance methods, not static). No blockers to implementation.
 
 **Toolkit**
 
-- Tool: Git (clone), text editor (code inspection), Gradle (verification)
+- Tool: Git (clone, worktrees), text editor (code inspection), javac with the kernel's flags (verification)
 - What it produced: Local clone, identified pattern in existing classes, confirmed gap in Byte/Short/Character
 - Difficulties: None — setup is straightforward
 - What changed: Nothing — gap is exactly as described in issue
@@ -158,7 +158,7 @@ Setup process was straightforward — the Makefile automates the complex javac f
 
 **Analysis**
 
-Root cause: Three wrapper classes (Byte.java, Short.java, Character.java) are missing static `hashCode(primitive_type)` methods that are part of the standard JDK API (since Java 8) and are already implemented in four other wrapper classes in this kernel (Integer, Long, Float, Double, Boolean). The missing methods prevent code from compiling when it calls these static hashCode methods on Byte, Short, or Character.
+Root cause: Three wrapper classes (Byte.java, Short.java, Character.java) are missing static `hashCode(primitive_type)` methods that are part of the standard JDK API (since Java 8) and are already implemented in five other wrapper classes in this kernel (Integer, Long, Float, Double, Boolean). The missing methods prevent code from compiling when it calls these static hashCode methods on Byte, Short, or Character.
 
 **Proposed Solution**
 
@@ -178,7 +178,7 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 
 **Toolkit**
 
-- Tool: Code editor (add methods), Gradle (compile/verify), Git (commit)
+- Tool: Code editor (add methods), javac with the kernel's flags (compile check), Git (commit)
 - What it produced: Clear implementation plan with three specific method additions
 - Difficulties: None — pattern is well-established
 - What changed: Nothing — straightforward pattern replication
@@ -205,7 +205,7 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 - Hash values should be deterministic and follow the pattern from Integer.hashCode(), Long.hashCode(), etc.
 
 **Observable Success Criteria:**
-1. ✓ Code compiles without errors (`gradlew.bat build` succeeds)
+1. The kernel compiles with the Makefile's javac flags, and upstream CI passed every make test target on this commit (https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270)
 2. ✓ Three new public static methods exist and are accessible
 3. ✓ Each method accepts correct primitive type
 4. ✓ Each method returns an int
@@ -214,7 +214,7 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 
 **Toolkit**
 
-- Tool: Gradle (compilation), local testing (method calls), test suite if available
+- Tool: javac with the kernel's flags (compilation), GitHub Codespaces (`make conformance`, 512/512), GitHub Actions CI (every make test target)
 - What it produced: Clear testing checklist with observable success criteria
 - Difficulties: None — testing is straightforward code compilation and method verification
 - What changed: Nothing — testing approach is standard for adding new methods
