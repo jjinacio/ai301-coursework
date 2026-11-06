@@ -68,10 +68,9 @@ I installed the voice guard and fixed its Windows path; its first entries are ch
 
 The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. I passed the upstream commit with `--base` for the manual runs, and those passed. The hook blocked `gh pr create` at 05:49 and 05:54, because local master had my commits and the diff was empty. Moving local master back to 621c29b fixed that, and the hook honored the 05:54 pass at 05:59. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Ran the PR monitor on PR #256 and wrote my playbook**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+I set my playbook's nudge threshold at 4 quiet days, based on six merged outside PRs that took 0.1 to 1.6 days. The first monitor run stopped because the script couldn't find `claude` on Windows, so I added the same `shutil.which` fix I used in the ship-gate, and the second run read PR #256 and drafted a wait move, with no nudge yet. I haven't posted anything, and I'll check the thread again on November 10.
 
 ---
 
