@@ -56,17 +56,17 @@ one in the week it belongs to.
 
 **Unit 5: Built issue-scout, graded sandbox candidates, and ran one real-world scan**
 
-I installed issue-scout and first ran it on the PathReview sandbox. I graded #26 and #36, and both passed. Then I rewrote `search-strategy.md` with four real-world queries, each traced to a sentence in my fit profile, and added a filter that drops practice and student repos. I also had to allow `gh search issues` in `settings.json` before the scan could run. The scan accepted five issues, but all five came from the Java query. Every top result had zero comments and the same update date, so the ranking couldn't separate them, and the Python queries never reached grading. The fix (rebalancing across queries) is noted in `scan-notes.md`, but I haven't applied it.
+I installed issue-scout and rewrote `search-strategy.md` with four real-world queries, each traced to my fit profile, and I had to allow `gh search issues` in `settings.json` before the scan could run. The scan accepted five issues, but all five came from the Java query, because every top result had zero comments and the same update date, so the ranking couldn't separate them. The Python queries never reached grading. I haven't applied the rebalancing fix yet; it's noted in `scan-notes.md`.
 
-My second pick is MaterialX #2813. The scout rejected it because a seven-week-old comment from an outsider says they want to take it on, and nobody has followed up. I kept it anyway, because the comment has no reply and the issue is still unassigned. I'd ask the maintainers before starting.
+My second pick is MaterialX #2813. It is explained under Why I Chose This Issue.
 
-**Unit 6: Installed voice guard, found Java issue #250, documented solution plan**
+**Unit 6: Voice guard, memory file, repro-check, and plan-check**
 
-I installed the voice guard hook to check outgoing comments against my voice guide, and created CLAUDE.local.md in the kernel repo so Claude remembers the project's build process. Then I searched GitHub and goodfirstissue.dev, found JackFurton/who-would-build-a-kernel-in-java #250 (add static hashCode methods for Byte, Short, Character wrapper classes). Posted a claim comment and got assigned. Analyzed the issue: three similar method additions following an established pattern in Integer, Long, Float, Double, Boolean. Filled in Understanding the Issue, Reproduction Process, Solution Approach, and Testing Strategy sections with analysis and before/after evidence. The voice guard required fixing on Windows (subprocess path resolution), and I discovered the issue explicitly requires a conformance test, not just method compilation.
+I installed the voice guard and fixed its Windows path; its log has four passes. I made `CLAUDE.local.md` in the clone and excluded it from git. repro-check and plan-check both returned accept, but they ran after PR #256 was open, and I didn't post either draft. My claim is still the bare `@duke-bot claim`, which I'm leaving as a gap.
 
 **Unit 7: Ship-gate and manifest: a compile-only guard, empty-diff blocks, and a Windows path fix**
 
-The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. It blocked the PR at 05:49 and 05:54 because the branch had no diff against local master, which already had my commits, so I passed the upstream commit with `--base`. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
+The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. I passed the upstream commit with `--base` for the manual runs, and those passed. The hook still blocked `gh pr create` at 05:49 and 05:54, because local master had my commits and the diff was empty. Moving local master back to 621c29b fixed that, and the hook honored the 05:54 pass at 05:59. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
 
 **Unit 8: [one line on the tool work]**
 
@@ -77,18 +77,18 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-I searched GitHub for good-first-issues across multiple languages and projects, evaluating candidates for clarity and scope. JackFurton/who-would-build-a-kernel-in-java #250 stood out: add static `hashCode(byte)`, `hashCode(short)`, and `hashCode(char)` methods to the Byte, Short, and Character classes — matching methods already present in Integer, Long, Float, Double, and Boolean.
+I found #250 on goodfirstissue.dev, not the Issue Selection site; I asked the instructor, who confirmed on 2026-11-06 that this pick is okay. It's three small static methods plus one test, with files and lines named. The repo is a small kernel project with merges every few days. The scout first rejected it because of my own claim. I changed the rule so a sole assignee who is me passes, and it accepted on rerun, straightforward. I learned the scout treats any assignee as taken.
 
-The issue is well-scoped: three similar methods to implement, clear requirements (match JDK API since Java 8), and straightforward verification (methods compile and match expected behavior). The problem is concrete (missing static methods), the solution is well-defined (add three methods following existing patterns), and success is observable (code compiles). This is a bounded, pattern-replication task suitable for a first contribution.
+My second pick is MaterialX #2813. The scout rejected it because a seven-week-old comment from an outsider says they want to take it on, and nobody has followed up. I kept it anyway, because the comment has no reply and the issue is still unassigned. I'd ask the maintainers before starting.
 
 **Claim comment:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/issues/250#issuecomment-6678581537
 
 **Toolkit**
 
-- Tool: GitHub direct search + goodfirstissue.dev (project curation) + manual evaluation
-- What it produced: Found multiple candidates; evaluated by freshness, scope clarity, and assignee status
-- Difficulties: Language/profile mismatch during search; many practice repos in results; required verification of each issue
-- What changed: Shifted to evaluating issues across multiple languages when Python options were limited; prioritized scope clarity and real project status over language preference
+- Tool: issue-scout (rubric and search strategy), goodfirstissue.dev, and manual grading
+- What it produced: I found #250 on goodfirstissue.dev, not through the scout. The scout's first two grades rejected #250 only because of my own claim, since the Available check treats any assignee as taken. After I changed that rule, it accepted #250 twice, with a difficulty note of straightforward. My one real-world scan accepted five issues, all from the Java query.
+- Difficulties: The scan's ranking didn't separate anything. Every top candidate had 0 comments and was updated the same day, so search order picked the top five and the Python queries never reached grading. The accepts on #250 came after I'd claimed it and opened a PR, so they didn't help me choose it.
+- What changed: Applied the Unit 6 scope-feasible patch and difficulty note, changed Available to pass a sole assignee who is me, and kept MaterialX #2813 after a reject for a stale claim comment. I logged two ranking fixes (round-robin across queries, a star filter) but haven't applied them yet.
 
 ---
 
@@ -277,16 +277,15 @@ The voice guard blocked the PR body at 05:51 on a sentence-length rule, so I sho
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+Building a Makefile-driven kernel with its own javac flags, git worktrees, CI logs, and `gh` queries.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+The ship-gate saw no diff because my commits were on local master, so I moved master back and passed the base. Its Windows `claude` path and a checkmark crash needed fixes. PR #255 had output that never came from a real run, so I closed it and opened #256 with real output.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+Only put evidence in a PR from runs I actually did. Check which branch a commit is on before pushing. Post a claim with a first step and a report-back date.
 
 ---
 
