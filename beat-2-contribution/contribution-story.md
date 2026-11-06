@@ -62,11 +62,11 @@ My second pick is MaterialX #2813. It is explained under Why I Chose This Issue.
 
 **Unit 6: Voice guard, memory file, repro-check, and plan-check**
 
-I installed the voice guard and fixed its Windows path; its log has four passes. I made `CLAUDE.local.md` in the clone and excluded it from git. repro-check and plan-check both returned accept, but they ran after PR #256 was open, and I didn't post either draft. My claim is still the bare `@duke-bot claim`, which I'm leaving as a gap.
+I installed the voice guard and fixed its Windows path; its first entries are checker failures, and its four passes came later, on the Unit 7 PR. I made `CLAUDE.local.md` in the clone and excluded it from git. repro-check and plan-check both returned accept (read-outs saved as repro-check-verdict.md and plan-check-verdict.md next to the drafts), but they ran after PR #256 was open, so they changed nothing. I posted the claim as the bare `@duke-bot claim`, which I'm leaving as a gap, and I didn't post the repro report.
 
 **Unit 7: Ship-gate and manifest: a compile-only guard, empty-diff blocks, and a Windows path fix**
 
-The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. I passed the upstream commit with `--base` for the manual runs, and those passed. The hook still blocked `gh pr create` at 05:49 and 05:54, because local master had my commits and the diff was empty. Moving local master back to 621c29b fixed that, and the hook honored the 05:54 pass at 05:59. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
+The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. I passed the upstream commit with `--base` for the manual runs, and those passed. The hook blocked `gh pr create` at 05:49 and 05:54, because local master had my commits and the diff was empty. Moving local master back to 621c29b fixed that, and the hook honored the 05:54 pass at 05:59. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
 
 **Unit 8: [one line on the tool work]**
 
@@ -141,16 +141,16 @@ Setup process was straightforward — the Makefile automates the complex javac f
 
 **Reproduction Evidence**
 
-- **Setup complete:** Git clone successful on Windows. This machine has JDK 21 and no `make`, so I compiled the kernel with the Makefile's javac flags locally. The full toolchain ran in GitHub Codespaces and upstream CI: `make conformance` passed 512/512 in Codespaces, and CI passed every make test target on this commit (https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270).
+- **Setup complete:** Git clone successful on Windows. This machine has JDK 21 and no `make`, so I compiled the kernel with the Makefile's javac flags locally. The full toolchain ran in GitHub Codespaces and upstream CI: `make conformance` passed 512/512 in Codespaces (that run's log wasn't saved, but upstream CI printed the same 512/512 in its log), and CI passed every make test target on this commit (https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270).
 - **Pattern identified:** Integer.hashCode(int), Long.hashCode(long), Float.hashCode(float), Double.hashCode(double), Boolean.hashCode(boolean) all exist and follow consistent pattern (all return `value;`)
-- **Gap confirmed with compilation error:** On upstream master, attempting to call `Byte.hashCode(byte)`, `Short.hashCode(short)`, or `Character.hashCode(char)` produces: `error: method hashCode in class Byte cannot be applied to given types required: no arguments, found: byte`
+- **Gap confirmed with compilation error:** On upstream master, attempting to call `Byte.hashCode(byte)`, `Short.hashCode(short)`, or `Character.hashCode(char)` produces (condensed from javac's three errors, one each for Byte, Short, and Character): `error: method hashCode in class Byte cannot be applied to given types`, then `required: no arguments, found: byte`
 - **My findings:** Issue is clear and well-scoped. The pattern to follow is already established. The error message proves the methods are missing (they exist as instance methods, not static). No blockers to implementation.
 
 **Toolkit**
 
 - Tool: javac with the kernel's flags, a git worktree for upstream master, GitHub Codespaces for `make conformance`, and repro-check, run on claim-draft.md and repro-draft.md after PR #256 was open
-- What it produced: Three compile errors on master (Byte, Short, Character), exit 0 on the fix branch, and `conformance: 512/512 passed` in Codespaces. repro-check returned accept.
-- Difficulties: No make or QEMU on this machine. The first Codespace wouldn't accept SSH, so I added an sshd devcontainer feature on a branch and deleted that branch on GitHub. repro-check couldn't read CONTRIBUTING.md, so its AI check rested on the README. I grepped the local CONTRIBUTING.md myself, and it has no AI rule. It also passed `@duke-bot claim`, but that comment gives no first step or report-back date.
+- What it produced: Three compile errors on master (Byte, Short, Character), a compile-guard pass on the fix branch in the 05:54 ship-gate run, and `conformance: 512/512 passed` in Codespaces, corroborated by upstream CI's log (run 42207683990). repro-check returned accept.
+- Difficulties: No make or QEMU on this machine. The first Codespace wouldn't accept SSH, so I added an sshd devcontainer feature on a branch and deleted that branch on GitHub. I grepped the local CONTRIBUTING.md myself and found no AI rule. My claim comment is the bare `@duke-bot claim`, with no first step or report-back date.
 - What changed: I didn't post the reproduction report. repro-check ran after PR #256 was open, so it changed nothing and caught nothing. I deleted the remote codespace-sshd branch, but a local copy is still on my computer.
 
 ---
@@ -180,7 +180,7 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 **Toolkit**
 
 - Tool: plan-check, run on plan.md and plan-comment.md after PR #256 was open
-- What it produced: An accept verdict, with all seven required checks passing
+- What it produced: An accept verdict, with all seven required checks passing (read-out saved as plan-check-verdict.md next to the drafts).
 - Difficulties: It ran after the PR was open, so it changed nothing and caught nothing. It couldn't find a voice guide in its skill folder, so my voice rules weren't applied.
 - What changed: Nothing in the plan. Before the run I changed one line in plan-comment.md from "I'll also add" to "The change also adds," since the test already existed. I didn't post the comment.
 
@@ -207,15 +207,15 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 
 **Observable Success Criteria:**
 1. The kernel compiles with the Makefile's javac flags, and upstream CI passed every make test target on this commit (https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270)
-2. ✓ Three new public static methods exist and are accessible
-3. ✓ Each method accepts correct primitive type
-4. ✓ Each method returns an int
-5. ✓ Methods are consistent (repeated calls return same value)
-6. ✓ No existing functionality broken (test suite passes if it exists)
+2. Expected: three new public static methods exist and are accessible (the compile guard and the diff show this)
+3. Expected: each method accepts its primitive type (not separately tested)
+4. Expected: each method returns an int (not separately tested)
+5. Expected: repeated calls return the same value (not separately tested)
+6. Expected: no existing functionality broken (CI test steps passed on this commit)
 
 **Toolkit**
 
-- Tool: javac with the kernel's flags (compilation), GitHub Codespaces (`make conformance`, 512/512), GitHub Actions CI (every make test target)
+- Tool: javac with the kernel's flags (compilation), GitHub Codespaces (`make conformance`, reported 512/512), GitHub Actions CI (every make test target)
 - What it produced: Clear testing checklist with observable success criteria
 - Difficulties: None — testing is straightforward code compilation and method verification
 - What changed: Nothing — testing approach is standard for adding new methods
@@ -246,7 +246,7 @@ The voice guard blocked the PR body at 05:51 on a sentence-length rule, so I sho
 **Toolkit**
 
 - Tool: git worktrees and branch moves for the base comparison; ship-gate's empty-diff check and voice guard for the blocks
-- What it produced: The gate's diff and voice-guard blocks at 05:49, 05:51, and 05:54, and the resolved base and PR body
+- What it produced: The gate's diff blocks at 05:49 and 05:54 and the voice-guard block at 05:51, and the resolved base and PR body
 - Difficulties: Local master had my commits on it, so the gate saw no diff. The voice guard rejected long sentences.
 - What changed: Moved local master back to upstream, passed the base commit, and shortened the long sentences.
 
