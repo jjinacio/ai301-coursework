@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Josh Inacio
 **GitHub Username:** jjinacio
 **Issue:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/issues/250
-**Pull Request:** [GitHub PR link, once opened]
+**Pull Request:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/pull/256
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -245,7 +245,7 @@ built, decisions you made when you made them, wrong turns included.]
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/pull/256
 
 **PR Description:** [what the PR says; much of the content above
 adapts into it]
