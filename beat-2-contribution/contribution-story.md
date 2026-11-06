@@ -78,6 +78,8 @@ I set my playbook's nudge threshold at 4 quiet days, based on six merged outside
 
 I found #250 on goodfirstissue.dev, not the Issue Selection site; I asked the instructor, who confirmed on 2026-11-06 that this pick is okay. It's three small static methods plus one test, with files and lines named. The repo is a small kernel project with merges every few days. The scout first rejected it because of my own claim. I changed the rule so a sole assignee who is me passes, and it accepted on rerun, straightforward. I learned the scout treats any assignee as taken.
 
+I want to learn how a kernel project tests its work, since this one checks every change against HotSpot. #250 fits me because it's three small methods that copy a pattern already in the code.
+
 My second pick is MaterialX #2813. The scout rejected it because a seven-week-old comment from an outsider says they want to take it on, and nobody has followed up. I kept it anyway, because the comment has no reply and the issue is still unassigned. I'd ask the maintainers before starting.
 
 **Claim comment:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/issues/250#issuecomment-6678581537
