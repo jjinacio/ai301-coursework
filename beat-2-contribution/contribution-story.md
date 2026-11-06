@@ -54,9 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: Built issue-scout with Python-focused search strategy; graded sandbox candidates**
+**Unit 5: Built issue-scout, graded sandbox candidates, and ran one real-world scan**
 
-I installed the issue-scout tool, wrote a search strategy with 3 queries targeting Python, backend work, and beginner-friendly issues, and applied ranking filters (no assignees, <10 comments, recent activity preferred). The scout found 5 candidates in codepath/pathreview-ai301-fa26-s3, and I graded two of them with the rubric (#26 and #36 both passed). The scout functioned as designed, though the permission system required explicit `gh` allowlist setup, and I later discovered the rubric's scope check was too strict for real issues. This taught me that tool setup has environmental constraints and that evaluation criteria need tuning for production repositories; I updated settings.json to allow `gh` commands globally and would update the scope check later in Unit 6.
+I installed issue-scout and first ran it on the PathReview sandbox. I graded #26 and #36, and both passed. Then I rewrote `search-strategy.md` with four real-world queries, each traced to a sentence in my fit profile, and added a filter that drops practice and student repos. I also had to allow `gh search issues` in `settings.json` before the scan could run. The scan accepted five issues, but all five came from the Java query. Every top result had zero comments and the same update date, so the ranking couldn't separate them, and the Python queries never reached grading. The fix (rebalancing across queries) is noted in `scan-notes.md`, but I haven't applied it.
 
 **Unit 6: Installed voice guard, found Java issue #250, documented solution plan**
 
