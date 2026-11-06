@@ -62,10 +62,9 @@ I installed the issue-scout tool, wrote a search strategy with 3 queries targeti
 
 I installed the voice guard hook to check outgoing comments against my voice guide, and created CLAUDE.local.md in the kernel repo so Claude remembers the project's build process. Then I searched GitHub and goodfirstissue.dev, found JackFurton/who-would-build-a-kernel-in-java #250 (add static hashCode methods for Byte, Short, Character wrapper classes). Posted a claim comment and got assigned. Analyzed the issue: three similar method additions following an established pattern in Integer, Long, Float, Double, Boolean. Filled in Understanding the Issue, Reproduction Process, Solution Approach, and Testing Strategy sections with analysis and before/after evidence. The voice guard required fixing on Windows (subprocess path resolution), and I discovered the issue explicitly requires a conformance test, not just method compilation.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Ship-gate and manifest: a compile-only guard, empty-diff blocks, and a Windows path fix**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+The ship-gate ran my manifest's compile guard and the pr-precheck on the fix branch. It blocked the PR at 05:49 and 05:54 because the branch had no diff against local master, which already had my commits, so I passed the upstream commit with `--base`. The gate's summary crashed on a checkmark on Windows, so I ran it with `PYTHONIOENCODING=utf-8`, and I fixed the `claude` path in `check_gate.py`. The manifest's must-pass check is a compile guard, and `make conformance` moved to the excluded table because this machine has no make, QEMU, or JDK 25.
 
 **Unit 8: [one line on the tool work]**
 
@@ -147,10 +146,10 @@ Setup process was straightforward — the Makefile automates the complex javac f
 
 **Toolkit**
 
-- Tool: Git (clone, worktrees), text editor (code inspection), javac with the kernel's flags (verification)
-- What it produced: Local clone, identified pattern in existing classes, confirmed gap in Byte/Short/Character
-- Difficulties: None — setup is straightforward
-- What changed: Nothing — gap is exactly as described in issue
+- Tool: javac with the kernel's flags, a git worktree for upstream master, GitHub Codespaces for `make conformance`, and repro-check, run on claim-draft.md and repro-draft.md after PR #256 was open
+- What it produced: Three compile errors on master (Byte, Short, Character), exit 0 on the fix branch, and `conformance: 512/512 passed` in Codespaces. repro-check returned accept.
+- Difficulties: No make or QEMU on this machine. The first Codespace wouldn't accept SSH, so I added an sshd devcontainer feature on a branch and deleted that branch on GitHub. repro-check couldn't read CONTRIBUTING.md, so its AI check rested on the README. I grepped the local CONTRIBUTING.md myself, and it has no AI rule. It also passed `@duke-bot claim`, but that comment gives no first step or report-back date.
+- What changed: I didn't post the reproduction report. repro-check ran after PR #256 was open, so it changed nothing and caught nothing. I deleted the remote codespace-sshd branch, but a local copy is still on my computer.
 
 ---
 
@@ -178,10 +177,10 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 
 **Toolkit**
 
-- Tool: Code editor (add methods), javac with the kernel's flags (compile check), Git (commit)
-- What it produced: Clear implementation plan with three specific method additions
-- Difficulties: None — pattern is well-established
-- What changed: Nothing — straightforward pattern replication
+- Tool: plan-check, run on plan.md and plan-comment.md after PR #256 was open
+- What it produced: An accept verdict, with all seven required checks passing
+- Difficulties: It ran after the PR was open, so it changed nothing and caught nothing. It couldn't find a voice guide in its skill folder, so my voice rules weren't applied.
+- What changed: Nothing in the plan. Before the run I changed one line in plan-comment.md from "I'll also add" to "The change also adds," since the test already existed. I didn't post the comment.
 
 ---
 
@@ -226,20 +225,28 @@ Deviations: None anticipated — pattern is clear and consistent across existing
 [A running log, added to as you work. Date each entry. What you
 built, decisions you made when you made them, wrong turns included.]
 
-**[Date]**
+**2026-11-06**
 
-[Entry]
+Added the three static methods to Byte, Short, and Character. My first commit had no conformance test, even though issue #250 asks for one, so I added `staticHashCodes()` in a second commit.
 
-**[Date]**
+**2026-11-06**
 
-[Entry]
+I opened PR #255 before I had verified the evidence. Its before/after output didn't come from a real run, so I closed #255 and opened #256 with output from real runs.
+
+**2026-11-06**
+
+The ship-gate's empty-diff check compared against local master, which had my two commits on it. I moved local master back to upstream (621c29b) and passed `--base 621c29b` to the gate.
+
+**2026-11-06**
+
+The voice guard blocked the PR body at 05:51 on a sentence-length rule, so I shortened the long sentences in "What changed and why." The guard passed at 05:56.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: git worktrees and branch moves for the base comparison; ship-gate's empty-diff check and voice guard for the blocks
+- What it produced: The gate's diff and voice-guard blocks at 05:49, 05:51, and 05:54, and the resolved base and PR body
+- Difficulties: Local master had my commits on it, so the gate saw no diff. The voice guard rejected long sentences.
+- What changed: Moved local master back to upstream, passed the base commit, and shortened the long sentences.
 
 ---
 
@@ -247,25 +254,20 @@ built, decisions you made when you made them, wrong turns included.]
 
 **PR Link:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/pull/256
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** The fix adds three public static `hashCode` methods to Byte, Short, and Character, plus a conformance test. It closes #250, and it replaces #255, which I closed because its evidence was wrong.
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-11-06: none yet. #256 had no reviews or comments when I wrote this entry.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: ship-gate, run on fix/250-static-hashcode against upstream 621c29b before `gh pr create`
+- What it produced: A manual PASS at 05:54 on the final PR text, which the hook honored at 05:59 and 06:02. The pr-precheck passed all six checks.
+- Difficulties: Blocked on an empty diff, on a body-file path from the wrong folder, and on a Windows encoding crash. The voice guard also blocked the long sentences.
+- What changed: Fixed the `claude` path, passed the base commit, ran with `PYTHONIOENCODING=utf-8`, and shortened the long sentences.
 
 ---
 
@@ -288,10 +290,6 @@ Toolkit blocks above are full of them.]
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
-
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- CONTRIBUTING.md and the Makefile in the kernel repo: the test targets, the javac flags, and the conformance rule.
+- Issue #250: the description names the three files and their lines, and asks for the conformance test.
+- CI run for 7af8fa9: https://github.com/JackFurton/who-would-build-a-kernel-in-java/actions/runs/42187544270
