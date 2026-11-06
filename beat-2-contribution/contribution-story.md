@@ -80,7 +80,7 @@ I searched GitHub for good-first-issues across multiple languages and projects, 
 
 The issue is well-scoped: three similar methods to implement, clear requirements (match JDK API since Java 8), and straightforward verification (methods compile and match expected behavior). The problem is concrete (missing static methods), the solution is well-defined (add three methods following existing patterns), and success is observable (code compiles). This is a bounded, pattern-replication task suitable for a first contribution.
 
-**Claim comment:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/issues/250#issuecomment-[your-comment-id]
+**Claim comment:** https://github.com/JackFurton/who-would-build-a-kernel-in-java/issues/250#issuecomment-6678581537
 
 **Toolkit**
 
